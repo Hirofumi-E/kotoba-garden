@@ -11,6 +11,7 @@ type View =
   | "editor";
 
 type AppMode = "learner" | "admin";
+type Locale = "ja" | "en";
 
 type Mission = {
   title: string;
@@ -60,8 +61,156 @@ type SavedProgress = {
 const baseXp = 120;
 const nextLevelXp = 250;
 const progressStorageKey = "kotoba-garden-progress";
+const localeStorageKey = "kotoba-garden-locale";
 // 正式公開時は認証と管理用の別ルート化が必要です。
 const appMode: AppMode = "learner";
+
+const uiText = {
+  ja: {
+    brandSubtitle: "N5の小さな庭",
+    admin: "管理",
+    help: "ヘルプ",
+    home: "ホーム",
+    vocabulary: "単語",
+    grammar: "文法",
+    review: "復習",
+    todayGarden: "今日の庭",
+    heroTitle: "朝つゆで、若葉がひらきました。",
+    heroDescription: "あと1問だけ遊ぶと、明日の花壇に小さな色が増えます。",
+    season: "春の朝",
+    tomorrowChange: "明日、花壇に変化",
+    defaultGardenStatus: "若葉が2枚、花が1つ増えました",
+    studiedGardenStatus: (message: string) => `今の学習で、${message}`,
+    defaultGardenNote: "あと1問で、明日の庭が少し変わります",
+    studiedGardenNote: (earnedXp: number) => `経験値 +${earnedXp} が庭に届きました`,
+    growGarden: "庭をもう少し育てる",
+    growGardenHint: "あと少しで若葉が育ちます",
+    grammarHint: "芽を育てる",
+    reviewHint: "水やりだけして戻る",
+    todayMissions: "今日のミッション",
+    streak: "3日連続",
+    achieved: "達成",
+    gardenGrowth: "庭の成長",
+    nextFlowerBed: "次は花壇",
+    flowerBed: "花壇",
+    path: "小道",
+    achievements: "実績",
+    friendSettings: "ともだち設定",
+    unlocked: "開花",
+    locked: "これから",
+    level: "レベル2",
+    xp: "経験値",
+    remainingXp: (xp: number) => `あと${xp}経験値で、新しい花が咲きます`,
+    intro: "はじめに",
+    onboardingTitle: "毎日少しずつ、ことばの庭を育てよう。",
+    onboardingDescription: "ともだちを選んで、無理のない学習時間から始めます。",
+    chooseFriend: "ともだちを選ぶ",
+    displayName: "表示名",
+    dailyGoal: "1日の目標",
+    startGarden: "庭をはじめる",
+    backHome: "ホームへ戻る",
+    switchLesson: "切り替え",
+    vocabularySession: "ことばの芽",
+    grammarSession: "文法の芽",
+    reviewSession: "復習の水やり",
+    question: "問題",
+    checkAnswer: "回答する",
+    next: "次へ",
+    finishLesson: "学習を完了する",
+    correct: "正解",
+    almost: "おしい",
+    addedToReview: "あとで復習に入ります",
+    lessonCompleteEyebrow: "学習完了",
+    lessonCompleteTitle: "今日の学習が終わりました",
+    correctSummary: (correct: number, total: number) =>
+      `${total}問中${correct}問正解しました`,
+    xpGained: (xp: number) => `経験値 +${xp}`,
+    oneAnswerXp: "経験値 +10",
+    growthByType: {
+      vocabulary: "若葉が少し育ちました",
+      grammar: "文の土台が少し育ちました",
+      review: "復習の水で芽が元気になりました",
+    },
+    feedbackGrowthByType: {
+      vocabulary: "ことばの芽に光が入りました",
+      grammar: "文法の芽が少し伸びました",
+      review: "しおれた芽に水をあげました",
+    },
+  },
+  en: {
+    brandSubtitle: "A small N5 garden",
+    admin: "Admin",
+    help: "Help",
+    home: "Home",
+    vocabulary: "Vocabulary",
+    grammar: "Grammar",
+    review: "Review",
+    todayGarden: "Today's Garden",
+    heroTitle: "Morning dew opened the young leaves.",
+    heroDescription: "Try one more question to add a little color tomorrow.",
+    season: "Spring Morning",
+    tomorrowChange: "Tomorrow's garden may change",
+    defaultGardenStatus: "Two young leaves and one flower grew",
+    studiedGardenStatus: (message: string) => `From this lesson, ${message}`,
+    defaultGardenNote: "One more question can gently change tomorrow's garden",
+    studiedGardenNote: (earnedXp: number) => `XP +${earnedXp} reached your garden`,
+    growGarden: "Grow Your Garden",
+    growGardenHint: "One small step is enough",
+    grammarHint: "Grow grammar sprouts",
+    reviewHint: "Water the review sprouts",
+    todayMissions: "Today's Missions",
+    streak: "3-day streak",
+    achieved: "Done",
+    gardenGrowth: "Garden Growth",
+    nextFlowerBed: "Next: Flower Bed",
+    flowerBed: "Flower Bed",
+    path: "Path",
+    achievements: "Achievements",
+    friendSettings: "Friend Settings",
+    unlocked: "Bloomed",
+    locked: "Later",
+    level: "Level 2",
+    xp: "XP",
+    remainingXp: (xp: number) => `${xp} XP until a new flower blooms`,
+    intro: "Welcome",
+    onboardingTitle: "Grow your Japanese garden a little every day.",
+    onboardingDescription: "Choose a friend and start with a gentle daily goal.",
+    chooseFriend: "Choose a friend",
+    displayName: "Display name",
+    dailyGoal: "Daily goal",
+    startGarden: "Start Garden",
+    backHome: "Back Home",
+    switchLesson: "Switch",
+    vocabularySession: "Word Sprout",
+    grammarSession: "Grammar Sprout",
+    reviewSession: "Review Watering",
+    question: "Question",
+    checkAnswer: "Check Answer",
+    next: "Next",
+    finishLesson: "Finish Lesson",
+    correct: "Correct",
+    almost: "Almost",
+    addedToReview: "Added to Review",
+    lessonCompleteEyebrow: "Lesson Complete",
+    lessonCompleteTitle: "Lesson Complete",
+    correctSummary: (correct: number, total: number) =>
+      `You answered ${correct} out of ${total} correctly`,
+    xpGained: (xp: number) => `XP +${xp}`,
+    oneAnswerXp: "XP +10",
+    growthByType: {
+      vocabulary: "your garden grew a little",
+      grammar: "your grammar roots grew a little",
+      review: "your review sprouts feel refreshed",
+    },
+    feedbackGrowthByType: {
+      vocabulary: "Light reached your word sprout",
+      grammar: "Your grammar sprout grew a little",
+      review: "You watered a wilted sprout",
+    },
+  },
+};
+
+type UiText = (typeof uiText)[Locale];
 
 const gardenItems: GardenItem[] = [
   { type: "sprout", label: "芽", className: "sprout-a" },
@@ -195,16 +344,11 @@ const achievements = [
   { name: "復習の花", detail: "復習で10問正解", unlocked: false },
 ];
 
-function buildGardenMessage(type: "vocabulary" | "grammar" | "review") {
-  if (type === "grammar") {
-    return "文の土台が少し育ちました";
-  }
-
-  if (type === "review") {
-    return "復習の水で芽が元気になりました";
-  }
-
-  return "若葉が少し育ちました";
+function buildGardenMessage(
+  type: "vocabulary" | "grammar" | "review",
+  locale: Locale,
+) {
+  return uiText[locale].growthByType[type];
 }
 
 function isSessionType(value: unknown): value is SessionResult["type"] {
@@ -260,8 +404,55 @@ function parseSavedProgress(value: string | null): SavedProgress | null {
     return null;
   }
 }
+
+function parseSavedLocale(value: string | null): Locale | null {
+  return value === "ja" || value === "en" ? value : null;
+}
+
+function getBrowserLocale(): Locale {
+  return navigator.language.toLowerCase().startsWith("ja") ? "ja" : "en";
+}
+
+function LanguageSwitch({
+  locale,
+  onChangeLocale,
+}: {
+  locale: Locale;
+  onChangeLocale: (locale: Locale) => void;
+}) {
+  return (
+    <div
+      className="admin-filters"
+      style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+      aria-label="Language"
+    >
+      {(["ja", "en"] as Locale[]).map((nextLocale) => (
+        <button
+          className={locale === nextLocale ? "selected" : ""}
+          key={nextLocale}
+          type="button"
+          style={
+            locale === nextLocale
+              ? {
+                  background: "#e8f8e8",
+                  borderColor: "#a6d19d",
+                  color: "#2f5938",
+                }
+              : undefined
+          }
+          onClick={() => onChangeLocale(nextLocale)}
+          aria-pressed={locale === nextLocale}
+        >
+          {nextLocale.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export default function Page() {
   const [view, setView] = useState<View>("home");
+  const [locale, setLocale] = useState<Locale>("ja");
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -276,6 +467,11 @@ export default function Page() {
     useState<Question[]>(questions);
 
   useEffect(() => {
+    const savedLocale = parseSavedLocale(
+      window.localStorage.getItem(localeStorageKey),
+    );
+    setLocale(savedLocale ?? getBrowserLocale());
+
     const savedProgress = parseSavedProgress(
       window.localStorage.getItem(progressStorageKey),
     );
@@ -290,6 +486,8 @@ export default function Page() {
       setLastSessionResult(savedProgress.lastSessionResult);
     }
   }, []);
+
+  const t = uiText[locale];
 
   const canUseAdmin = appMode === "admin";
   const visibleView = !canUseAdmin && view === "editor" ? "home" : view;
@@ -398,6 +596,11 @@ export default function Page() {
     setLastSessionResult(null);
   }
 
+  function changeLocale(nextLocale: Locale) {
+    setLocale(nextLocale);
+    window.localStorage.setItem(localeStorageKey, nextLocale);
+  }
+
   return (
     <main className="app-shell">
       <section className="phone-frame" aria-label="ことばガーデンの画面">
@@ -407,15 +610,19 @@ export default function Page() {
               className="brand-button"
               type="button"
               onClick={() => setView("home")}
-              aria-label="ホームへ戻る"
+              aria-label={t.backHome}
             >
               <span className="brand-mark">こ</span>
               <span>
                 <strong>ことばガーデン</strong>
-                <small>N5の小さな庭</small>
+                <small>{t.brandSubtitle}</small>
               </span>
             </button>
             <div className="top-actions">
+              <LanguageSwitch
+                locale={locale}
+                onChangeLocale={changeLocale}
+              />
               {canUseAdmin && (
                 <button
                   className="admin-link"
@@ -423,14 +630,14 @@ export default function Page() {
                   onClick={() => setView("editor")}
                   aria-label="教材管理を開く"
                 >
-                  管理
+                  {t.admin}
                 </button>
               )}
               <button
                 className="ghost-icon"
                 type="button"
                 onClick={() => setView("onboarding")}
-                aria-label="ヘルプを開く"
+                aria-label={t.help}
               >
                 ?
               </button>
@@ -445,12 +652,14 @@ export default function Page() {
             onReview={() => openQuiz("review")}
             onOnboarding={() => setView("onboarding")}
             lastSessionResult={lastSessionResult}
+            locale={locale}
             savedXp={savedXp}
+            t={t}
           />
         )}
 
         {visibleView === "onboarding" && (
-          <OnboardingScreen onComplete={() => setView("home")} />
+          <OnboardingScreen onComplete={() => setView("home")} t={t} />
         )}
 
         {isQuiz && (
@@ -470,9 +679,12 @@ export default function Page() {
             onPrimaryAction={handlePrimaryQuizAction}
             onBack={backToHome}
             onCompleteSession={completeSessionAndReturnHome}
+            locale={locale}
+            onChangeLocale={changeLocale}
             onSwitch={() =>
               openQuiz(visibleView === "grammar" ? "vocabulary" : "grammar")
             }
+            t={t}
           />
         )}
 
@@ -487,10 +699,10 @@ export default function Page() {
         {!isQuiz && (
           <nav className="bottom-nav" aria-label="メインナビゲーション">
             {[
-              ["home", "ホーム"],
-              ["vocabulary", "単語"],
-              ["grammar", "文法"],
-              ["review", "復習"],
+              ["home", t.home],
+              ["vocabulary", t.vocabulary],
+              ["grammar", t.grammar],
+              ["review", t.review],
             ].map(([targetView, label]) => (
               <button
                 key={targetView}
@@ -661,40 +873,46 @@ function HomeScreen({
   onReview,
   onOnboarding,
   lastSessionResult,
+  locale,
   savedXp,
+  t,
 }: {
   onStart: () => void;
   onGrammar: () => void;
   onReview: () => void;
   onOnboarding: () => void;
   lastSessionResult: SessionResult | null;
+  locale: Locale;
   savedXp: number;
+  t: UiText;
 }) {
   const displayXp = savedXp;
   const xpPercent = Math.min(100, (displayXp / nextLevelXp) * 100);
   const gardenStatus = lastSessionResult
-    ? `今の学習で、${lastSessionResult.gardenMessage}`
-    : "若葉が2枚、花が1つ増えました";
+    ? t.studiedGardenStatus(
+        buildGardenMessage(lastSessionResult.type, locale),
+      )
+    : t.defaultGardenStatus;
   const gardenNote = lastSessionResult
-    ? `経験値 +${lastSessionResult.earnedXp} が庭に届きました`
-    : "あと1問で、明日の庭が少し変わります";
+    ? t.studiedGardenNote(lastSessionResult.earnedXp)
+    : t.defaultGardenNote;
   const remainingXp = Math.max(0, nextLevelXp - displayXp);
 
   return (
     <div className="screen-content">
       <section className="hero-garden">
         <div className="home-copy">
-          <p className="eyebrow">今日の庭</p>
-          <h1>朝つゆで、若葉がひらきました。</h1>
-          <p>あと1問だけ遊ぶと、明日の花壇に小さな色が増えます。</p>
+          <p className="eyebrow">{t.todayGarden}</p>
+          <h1>{t.heroTitle}</h1>
+          <p>{t.heroDescription}</p>
         </div>
 
         <div className="garden-stage" aria-label="レベル2の庭">
           <div className="sun" />
           <div className="cloud cloud-a" />
           <div className="cloud cloud-b" />
-          <div className="growth-ribbon">春の朝</div>
-          <div className="tomorrow-seed">明日、花壇に変化</div>
+          <div className="growth-ribbon">{t.season}</div>
+          <div className="tomorrow-seed">{t.tomorrowChange}</div>
           <div className="garden-path" />
           <div className="character">
             <span className="ear left" />
@@ -729,7 +947,7 @@ function HomeScreen({
         }
       >
         <div>
-          <span>今日の庭</span>
+          <span>{t.todayGarden}</span>
           <strong>{gardenStatus}</strong>
         </div>
         <small>{gardenNote}</small>
@@ -737,23 +955,23 @@ function HomeScreen({
 
       <section className="quick-grid">
         <button className="primary-action" type="button" onClick={onStart}>
-          <span>庭をもう少し育てる</span>
-          <small>あと少しで若葉が育ちます</small>
+          <span>{t.growGarden}</span>
+          <small>{t.growGardenHint}</small>
         </button>
         <button className="secondary-action" type="button" onClick={onGrammar}>
-          <span>文法</span>
-          <small>芽を育てる</small>
+          <span>{t.grammar}</span>
+          <small>{t.grammarHint}</small>
         </button>
         <button className="review-action" type="button" onClick={onReview}>
-          <span>復習</span>
-          <small>水やりだけして戻る</small>
+          <span>{t.review}</span>
+          <small>{t.reviewHint}</small>
         </button>
       </section>
 
       <section className="missions-panel">
         <div className="section-heading">
-          <h2>今日のミッション</h2>
-          <span>3日連続</span>
+          <h2>{t.todayMissions}</h2>
+          <span>{t.streak}</span>
         </div>
         <div className="mission-list">
           {missions.map((mission) => (
@@ -771,7 +989,7 @@ function HomeScreen({
               </div>
               <span>
                 {mission.progress >= mission.target
-                  ? "達成"
+                  ? t.achieved
                   : `${mission.progress}/${mission.target}`}
               </span>
             </article>
@@ -781,22 +999,22 @@ function HomeScreen({
 
       <section className="growth-panel">
         <div className="section-heading">
-          <h2>庭の成長</h2>
-          <span>次は花壇</span>
+          <h2>{t.gardenGrowth}</h2>
+          <span>{t.nextFlowerBed}</span>
         </div>
         <div className="growth-steps" aria-label="庭の成長段階">
           <span className="done">芽</span>
           <span className="done">若葉</span>
-          <span>花壇</span>
-          <span>小道</span>
+          <span>{t.flowerBed}</span>
+          <span>{t.path}</span>
         </div>
       </section>
 
       <section className="badge-strip">
         <div className="section-heading">
-          <h2>実績</h2>
+          <h2>{t.achievements}</h2>
           <button type="button" onClick={onOnboarding}>
-            ともだち設定
+            {t.friendSettings}
           </button>
         </div>
         <div className="badges">
@@ -805,7 +1023,7 @@ function HomeScreen({
               className={achievement.unlocked ? "badge unlocked" : "badge"}
               key={achievement.name}
             >
-              <span>{achievement.unlocked ? "開花" : "これから"}</span>
+              <span>{achievement.unlocked ? t.unlocked : t.locked}</span>
               <strong>{achievement.name}</strong>
               <small>{achievement.detail}</small>
             </article>
@@ -815,31 +1033,37 @@ function HomeScreen({
 
       <section className="level-card">
         <div>
-          <span>レベル2</span>
+          <span>{t.level}</span>
           <strong>
-            経験値 {displayXp} / {nextLevelXp}
+            {t.xp} {displayXp} / {nextLevelXp}
           </strong>
         </div>
         <div className="xp-track">
           <span style={{ width: `${xpPercent}%` }} />
         </div>
-        <small>あと{remainingXp}経験値で、新しい花が咲きます</small>
+        <small>{t.remainingXp(remainingXp)}</small>
       </section>
     </div>
   );
 }
 
-function OnboardingScreen({ onComplete }: { onComplete: () => void }) {
+function OnboardingScreen({
+  onComplete,
+  t,
+}: {
+  onComplete: () => void;
+  t: UiText;
+}) {
   return (
     <div className="screen-content onboarding-screen">
       <section className="welcome-panel">
-        <p className="eyebrow">はじめに</p>
-        <h1>毎日少しずつ、ことばの庭を育てよう。</h1>
-        <p>ともだちを選んで、無理のない学習時間から始めます。</p>
+        <p className="eyebrow">{t.intro}</p>
+        <h1>{t.onboardingTitle}</h1>
+        <p>{t.onboardingDescription}</p>
       </section>
 
       <section className="friend-picker">
-        <h2>ともだちを選ぶ</h2>
+        <h2>{t.chooseFriend}</h2>
         <div className="friend-grid">
           {["うさぎ", "ねこ", "くま", "ことり"].map((friend) => (
             <button
@@ -855,10 +1079,10 @@ function OnboardingScreen({ onComplete }: { onComplete: () => void }) {
       </section>
 
       <section className="setup-card">
-        <label htmlFor="name">表示名</label>
+        <label htmlFor="name">{t.displayName}</label>
         <input id="name" defaultValue="はな" />
 
-        <label>1日の目標</label>
+        <label>{t.dailyGoal}</label>
         <div className="goal-picker">
           {["5分", "10分", "15分"].map((goal) => (
             <button
@@ -873,7 +1097,7 @@ function OnboardingScreen({ onComplete }: { onComplete: () => void }) {
       </section>
 
       <button className="primary-action wide" type="button" onClick={onComplete}>
-        庭をはじめる
+        {t.startGarden}
       </button>
     </div>
   );
@@ -895,7 +1119,10 @@ function QuizScreen({
   onPrimaryAction,
   onBack,
   onCompleteSession,
+  locale,
+  onChangeLocale,
   onSwitch,
+  t,
 }: {
   quizView: "vocabulary" | "grammar" | "review";
   question: Question;
@@ -912,27 +1139,25 @@ function QuizScreen({
   onPrimaryAction: () => void;
   onBack: () => void;
   onCompleteSession: (result: SessionResult) => void;
+  locale: Locale;
+  onChangeLocale: (locale: Locale) => void;
   onSwitch: () => void;
+  t: UiText;
 }) {
   const isCorrect = hasSubmitted && selectedAnswer === question.correctAnswer;
   const quizLabel =
     quizView === "grammar"
-      ? "文法の芽"
+      ? t.grammarSession
       : quizView === "review"
-        ? "復習の水やり"
-        : "ことばの芽";
+        ? t.reviewSession
+        : t.vocabularySession;
   const primaryActionLabel = !hasSubmitted
-    ? "回答する"
+    ? t.checkAnswer
     : isFinalQuestion
-      ? "学習を完了する"
-      : "次へ";
-  const feedbackGrowthMessage =
-    quizView === "grammar"
-      ? "文法の芽が少し伸びました"
-      : quizView === "review"
-        ? "しおれた芽に水をあげました"
-        : "ことばの芽に光が入りました";
-  const completeGardenMessage = buildGardenMessage(quizView);
+      ? t.finishLesson
+      : t.next;
+  const feedbackGrowthMessage = t.feedbackGrowthByType[quizView];
+  const completeGardenMessage = buildGardenMessage(quizView, locale);
   const earnedXp = correctCount * 10;
 
   function finishSession() {
@@ -950,18 +1175,18 @@ function QuizScreen({
     return (
       <div className="screen-content quiz-screen complete-screen">
         <section className="session-complete-card">
-          <p className="eyebrow">学習完了</p>
-          <h1>今日の学習が終わりました</h1>
+          <p className="eyebrow">{t.lessonCompleteEyebrow}</p>
+          <h1>{t.lessonCompleteTitle}</h1>
           <p>
-            {totalQuestions}問中{correctCount}問正解しました
+            {t.correctSummary(correctCount, totalQuestions)}
           </p>
           <div className="complete-garden" aria-hidden="true">
             <span className="growth-icon flower" />
           </div>
           <strong>{completeGardenMessage}</strong>
-          <small>経験値 +{earnedXp}</small>
+          <small>{t.xpGained(earnedXp)}</small>
           <button className="next-action" type="button" onClick={finishSession}>
-            ホームへ戻る
+            {t.backHome}
           </button>
         </section>
       </div>
@@ -972,16 +1197,17 @@ function QuizScreen({
     <div className="screen-content quiz-screen">
       <section className="learning-header">
         <button type="button" onClick={onBack}>
-          ホームへ戻る
+          {t.backHome}
         </button>
         <div>
           <p>{quizLabel}</p>
           <strong>
-            {currentQuestionIndex + 1} / {totalQuestions}
+            {t.question} {currentQuestionIndex + 1} / {totalQuestions}
           </strong>
         </div>
+        <LanguageSwitch locale={locale} onChangeLocale={onChangeLocale} />
         <button type="button" onClick={onSwitch}>
-          切り替え
+          {t.switchLesson}
         </button>
       </section>
 
@@ -1008,7 +1234,7 @@ function QuizScreen({
       </section>
 
       <section className="question-card">
-        {rewardPulse && <span className="xp-pop">経験値 +10</span>}
+        {rewardPulse && <span className="xp-pop">{t.oneAnswerXp}</span>}
         <p className="prompt">{question.prompt}</p>
         <p>{question.promptEn}</p>
       </section>
@@ -1042,11 +1268,11 @@ function QuizScreen({
 
       {hasSubmitted && (
         <section className={isCorrect ? "feedback good" : "feedback soft"}>
-          <strong>{isCorrect ? "正解" : "おしい"}</strong>
+          <strong>{isCorrect ? t.correct : t.almost}</strong>
           <p>{question.explanation}</p>
           {isCorrect && <p className="growth-message">{feedbackGrowthMessage}</p>}
           <small>
-            {isCorrect ? "経験値 +10" : "あとで復習に入ります"}
+            {isCorrect ? t.oneAnswerXp : t.addedToReview}
           </small>
         </section>
       )}
