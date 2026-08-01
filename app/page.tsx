@@ -371,7 +371,12 @@ function buildSessionQuestions(
       ? sourceQuestions
       : sourceQuestions.filter((question) => question.type === nextView);
 
-  return shuffleArray(source).slice(0, growthSteps.length);
+  return shuffleArray(source)
+    .slice(0, growthSteps.length)
+    .map((question) => ({
+      ...question,
+      choices: shuffleArray(question.choices),
+    }));
 }
 
 function isSessionType(value: unknown): value is SessionResult["type"] {
