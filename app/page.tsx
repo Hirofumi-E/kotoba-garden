@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 type View =
   | "home"
@@ -351,6 +351,29 @@ function buildGardenMessage(
   return uiText[locale].growthByType[type];
 }
 
+function shuffleArray<T>(items: T[]): T[] {
+  const result = [...items];
+
+  for (let index = result.length - 1; index > 0; index--) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+  }
+
+  return result;
+}
+
+function buildSessionQuestions(
+  nextView: View,
+  sourceQuestions: Question[],
+): Question[] {
+  const source =
+    nextView === "review"
+      ? sourceQuestions
+      : sourceQuestions.filter((question) => question.type === nextView);
+
+  return shuffleArray(source).slice(0, growthSteps.length);
+}
+
 function isSessionType(value: unknown): value is SessionResult["type"] {
   return value === "vocabulary" || value === "grammar" || value === "review";
 }
@@ -465,6 +488,7 @@ export default function Page() {
     useState<SessionResult | null>(null);
   const [editableQuestions, setEditableQuestions] =
     useState<Question[]>(questions);
+  const [sessionQuestions, setSessionQuestions] = useState<Question[]>([]);
 
   useEffect(() => {
     const savedLocale = parseSavedLocale(
@@ -495,14 +519,6 @@ export default function Page() {
     visibleView === "vocabulary" ||
     visibleView === "grammar" ||
     visibleView === "review";
-  const sessionQuestions = useMemo(() => {
-    const source =
-      visibleView === "review"
-        ? editableQuestions
-        : editableQuestions.filter((question) => question.type === visibleView);
-
-    return source.slice(0, growthSteps.length);
-  }, [editableQuestions, visibleView]);
   const activeQuestion =
     sessionQuestions[currentQuestionIndex] ??
     sessionQuestions[0] ??
@@ -518,10 +534,12 @@ export default function Page() {
     setAnsweredCount(0);
     setSessionComplete(false);
     setRewardPulse(false);
+    setSessionQuestions([]);
   }
 
   function openQuiz(nextView: View) {
     resetSession();
+    setSessionQuestions(buildSessionQuestions(nextView, editableQuestions));
     setView(nextView);
   }
 
