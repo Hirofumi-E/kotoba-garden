@@ -1670,3 +1670,93 @@ p {
     padding: 10px 12px;
   }
 }
+
+@media (max-width: 390px) {
+  .quiz-screen {
+    gap: 7px;
+    padding: 8px 10px 74px;
+  }
+
+  .learning-header {
+    gap: 4px;
+    grid-template-columns: 66px 1fr 50px 50px;
+    padding: 5px;
+  }
+
+  .learning-header button {
+    font-size: 10px;
+    line-height: 1.05;
+    min-height: 34px;
+    padding: 0 4px;
+  }
+
+  .learning-header p {
+    font-size: 12px;
+  }
+
+  .learning-header strong {
+    font-size: 10px;
+  }
+
+  .learning-header .admin-filters {
+    gap: 3px;
+  }
+
+  .learning-header .admin-filters button {
+    font-size: 10px;
+    min-height: 34px;
+    padding: 0 3px;
+  }
+
+  .learning-growth {
+    gap: 4px;
+    padding: 5px;
+  }
+
+  .growth-step {
+    padding: 4px 1px;
+  }
+
+  .growth-step small {
+    font-size: 8px;
+  }
+
+  .growth-icon {
+    height: 16px;
+    transform: scale(0.78);
+    width: 16px;
+  }
+
+  .question-card {
+    min-height: 108px;
+    padding: 13px 14px;
+  }
+
+  .prompt {
+    font-size: 28px;
+    margin-bottom: 5px;
+  }
+
+  .choice-list {
+    gap: 6px;
+  }
+
+  .choice {
+    min-height: 44px;
+    padding: 9px 12px;
+  }
+
+  .feedback {
+    padding: 8px 12px;
+  }
+
+  .quiz-actions {
+    margin: 0 -10px -74px;
+    padding: 10px 10px 12px;
+  }
+
+  .answer-action,
+  .next-action {
+    min-height: 48px;
+  }
+}
