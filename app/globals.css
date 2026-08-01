@@ -642,6 +642,42 @@ p {
   padding: 16px;
 }
 
+.compact-level-status {
+  background:
+    radial-gradient(circle at 92% 24%, rgba(246, 214, 117, 0.24), transparent 26%),
+    linear-gradient(135deg, #fffdf8, #f2ffed);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 8px 22px rgba(91, 66, 43, 0.06);
+  display: grid;
+  gap: 9px;
+  padding: 12px 14px;
+}
+
+.compact-level-status > div:first-child {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.compact-level-status strong {
+  color: #2f5938;
+  font-size: 14px;
+}
+
+.compact-level-status span,
+.compact-level-status small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.compact-level-status .xp-track {
+  height: 9px;
+  margin-top: 6px;
+}
+
 .growth-panel {
   display: grid;
   gap: 12px;

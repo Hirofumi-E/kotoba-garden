@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 
 type View =
   | "home"
+  | "missions"
+  | "garden"
+  | "achievements"
   | "onboarding"
   | "vocabulary"
   | "grammar"
@@ -88,9 +91,11 @@ const uiText = {
     grammarHint: "芽を育てる",
     reviewHint: "水やりだけして戻る",
     todayMissions: "今日のミッション",
+    missions: "ミッション",
     streak: "3日連続",
     achieved: "達成",
     gardenGrowth: "庭の成長",
+    garden: "庭",
     nextFlowerBed: "次は花壇",
     flowerBed: "花壇",
     path: "小道",
@@ -159,9 +164,11 @@ const uiText = {
     grammarHint: "Grow grammar sprouts",
     reviewHint: "Water the review sprouts",
     todayMissions: "Today's Missions",
+    missions: "Missions",
     streak: "3-day streak",
     achieved: "Done",
     gardenGrowth: "Garden Growth",
+    garden: "Garden",
     nextFlowerBed: "Next: Flower Bed",
     flowerBed: "Flower Bed",
     path: "Path",
@@ -673,12 +680,25 @@ export default function Page() {
             onStart={() => openQuiz("vocabulary")}
             onGrammar={() => openQuiz("grammar")}
             onReview={() => openQuiz("review")}
-            onOnboarding={() => setView("onboarding")}
             lastSessionResult={lastSessionResult}
             locale={locale}
             savedXp={savedXp}
             t={t}
           />
+        )}
+
+        {visibleView === "missions" && <MissionScreen t={t} />}
+
+        {visibleView === "garden" && (
+          <GardenScreen
+            lastSessionResult={lastSessionResult}
+            locale={locale}
+            t={t}
+          />
+        )}
+
+        {visibleView === "achievements" && (
+          <AchievementScreen onOnboarding={() => setView("onboarding")} t={t} />
         )}
 
         {visibleView === "onboarding" && (
@@ -723,20 +743,16 @@ export default function Page() {
           <nav className="bottom-nav" aria-label="メインナビゲーション">
             {[
               ["home", t.home],
-              ["vocabulary", t.vocabulary],
-              ["grammar", t.grammar],
-              ["review", t.review],
+              ["missions", t.missions],
+              ["garden", t.garden],
+              ["achievements", t.achievements],
             ].map(([targetView, label]) => (
               <button
                 key={targetView}
                 className={visibleView === targetView ? "active" : ""}
                 type="button"
                 onClick={() =>
-                  targetView === "vocabulary" || targetView === "grammar"
-                    ? openQuiz(targetView as View)
-                    : targetView === "review"
-                      ? openQuiz("review")
-                      : setView(targetView as View)
+                  setView(targetView as View)
                 }
               >
                 {label}
@@ -894,7 +910,6 @@ function HomeScreen({
   onStart,
   onGrammar,
   onReview,
-  onOnboarding,
   lastSessionResult,
   locale,
   savedXp,
@@ -903,7 +918,6 @@ function HomeScreen({
   onStart: () => void;
   onGrammar: () => void;
   onReview: () => void;
-  onOnboarding: () => void;
   lastSessionResult: SessionResult | null;
   locale: Locale;
   savedXp: number;
@@ -923,6 +937,13 @@ function HomeScreen({
 
   return (
     <div className="screen-content">
+      <CompactLevelStatus
+        displayXp={displayXp}
+        remainingXp={remainingXp}
+        t={t}
+        xpPercent={xpPercent}
+      />
+
       <section className="hero-garden">
         <div className="home-copy">
           <p className="eyebrow">{t.todayGarden}</p>
@@ -990,7 +1011,42 @@ function HomeScreen({
           <small>{t.reviewHint}</small>
         </button>
       </section>
+    </div>
+  );
+}
 
+function CompactLevelStatus({
+  displayXp,
+  remainingXp,
+  t,
+  xpPercent,
+}: {
+  displayXp: number;
+  remainingXp: number;
+  t: UiText;
+  xpPercent: number;
+}) {
+  return (
+    <section className="compact-level-status">
+      <div>
+        <strong>{t.level}</strong>
+        <span>{t.remainingXp(remainingXp)}</span>
+      </div>
+      <div>
+        <small>
+          {t.xp} {displayXp} / {nextLevelXp}
+        </small>
+        <div className="xp-track">
+          <span style={{ width: `${xpPercent}%` }} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MissionScreen({ t }: { t: UiText }) {
+  return (
+    <div className="screen-content">
       <section className="missions-panel">
         <div className="section-heading">
           <h2>{t.todayMissions}</h2>
@@ -1019,6 +1075,41 @@ function HomeScreen({
           ))}
         </div>
       </section>
+    </div>
+  );
+}
+
+function GardenScreen({
+  lastSessionResult,
+  locale,
+  t,
+}: {
+  lastSessionResult: SessionResult | null;
+  locale: Locale;
+  t: UiText;
+}) {
+  const gardenStatus = lastSessionResult
+    ? t.studiedGardenStatus(
+        buildGardenMessage(lastSessionResult.type, locale),
+      )
+    : t.defaultGardenStatus;
+  const gardenNote = lastSessionResult
+    ? t.studiedGardenNote(lastSessionResult.earnedXp)
+    : t.defaultGardenNote;
+
+  return (
+    <div className="screen-content">
+      <section
+        className={
+          lastSessionResult ? "garden-diary just-grown" : "garden-diary"
+        }
+      >
+        <div>
+          <span>{t.todayGarden}</span>
+          <strong>{gardenStatus}</strong>
+        </div>
+        <small>{gardenNote}</small>
+      </section>
 
       <section className="growth-panel">
         <div className="section-heading">
@@ -1032,7 +1123,19 @@ function HomeScreen({
           <span>{t.path}</span>
         </div>
       </section>
+    </div>
+  );
+}
 
+function AchievementScreen({
+  onOnboarding,
+  t,
+}: {
+  onOnboarding: () => void;
+  t: UiText;
+}) {
+  return (
+    <div className="screen-content">
       <section className="badge-strip">
         <div className="section-heading">
           <h2>{t.achievements}</h2>
@@ -1052,19 +1155,6 @@ function HomeScreen({
             </article>
           ))}
         </div>
-      </section>
-
-      <section className="level-card">
-        <div>
-          <span>{t.level}</span>
-          <strong>
-            {t.xp} {displayXp} / {nextLevelXp}
-          </strong>
-        </div>
-        <div className="xp-track">
-          <span style={{ width: `${xpPercent}%` }} />
-        </div>
-        <small>{t.remainingXp(remainingXp)}</small>
       </section>
     </div>
   );
