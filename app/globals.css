@@ -213,6 +213,14 @@ small,
   line-height: 1.12;
 }
 
+.home-copy .eyebrow {
+  color: #5c7d41;
+  display: block;
+  line-height: 1.1;
+  margin-bottom: 4px;
+  text-transform: none;
+}
+
 .eyebrow {
   font-size: 12px;
   font-weight: 900;
