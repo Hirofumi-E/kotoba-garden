@@ -78,6 +78,7 @@ const uiText = {
     grammar: "文法",
     review: "復習",
     todayGarden: "今日の庭",
+    todayGrowth: "今日の成長",
     heroTitle: "若葉がひらきました。",
     heroDescription: "",
     season: "春の朝",
@@ -151,6 +152,7 @@ const uiText = {
     grammar: "Grammar",
     review: "Review",
     todayGarden: "Today's Garden",
+    todayGrowth: "Today's Growth",
     heroTitle: "New leaves opened.",
     heroDescription: "",
     season: "Spring Morning",
@@ -991,7 +993,7 @@ function HomeScreen({
         }
       >
         <div>
-          <span>{t.todayGarden}</span>
+          <span>{t.todayGrowth}</span>
           <strong>{gardenStatus}</strong>
         </div>
         <small>{gardenNote}</small>
