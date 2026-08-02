@@ -176,16 +176,9 @@ small,
   padding: 16px 14px 86px;
 }
 
-.home-section-title {
-  color: #2f5938;
-  font-size: 15px;
-  font-weight: 900;
-  line-height: 1.2;
-}
-
 .hero-garden {
   background:
-    linear-gradient(180deg, rgba(223, 245, 255, 0.96) 0%, rgba(246, 255, 231, 0.98) 54%, rgba(211, 235, 168, 0.98) 100%);
+    linear-gradient(180deg, #dff5ff 0%, #eefde4 62%, #cfe9a8 100%);
   border: 1px solid #c5e9d0;
   border-radius: 24px;
   overflow: hidden;
@@ -213,7 +206,7 @@ small,
   display: grid;
   gap: 4px;
   justify-items: start;
-  padding: 16px 18px 10px;
+  padding: 16px 18px 8px;
   position: relative;
   z-index: 2;
 }
@@ -223,12 +216,15 @@ small,
   line-height: 1.12;
 }
 
-.home-copy .eyebrow {
+.garden-card-title {
+  align-items: center;
   color: #5c7d41;
-  display: block;
+  display: inline-flex;
+  font-size: 15px;
+  font-weight: 900;
+  gap: 6px;
   line-height: 1.1;
   margin: 0;
-  text-transform: none;
 }
 
 .hero-season-pill {
@@ -279,7 +275,7 @@ p {
 }
 
 .garden-stage {
-  height: 246px;
+  height: 262px;
   overflow: hidden;
   position: relative;
 }
@@ -300,9 +296,10 @@ p {
   border-radius: 999px;
   box-shadow: 0 0 0 10px rgba(255, 217, 120, 0.28);
   height: 50px;
-  right: 26px;
-  top: 22px;
+  right: 32px;
+  top: 12px;
   width: 50px;
+  z-index: 2;
 }
 
 .cloud {
@@ -314,14 +311,225 @@ p {
 }
 
 .cloud-a {
-  left: 18px;
-  top: 118px;
+  left: 70px;
+  top: 72px;
 }
 
 .cloud-b {
-  right: 68px;
-  top: 98px;
+  right: 48px;
+  top: 92px;
   width: 54px;
+}
+
+.garden-hills {
+  background:
+    radial-gradient(circle at 7% 100%, #b9de75 0 46px, transparent 47px),
+    radial-gradient(circle at 94% 100%, #b9de75 0 50px, transparent 51px),
+    radial-gradient(circle at 58% 105%, #c9e994 0 82px, transparent 83px),
+    linear-gradient(180deg, transparent 0 42%, rgba(223, 246, 196, 0.88) 43% 100%);
+  bottom: 68px;
+  height: 118px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  z-index: 1;
+}
+
+.growth-showcase {
+  align-items: end;
+  bottom: 4px;
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(4, 1fr);
+  left: 12px;
+  position: absolute;
+  right: 12px;
+  z-index: 3;
+}
+
+.growth-plot {
+  align-items: center;
+  display: grid;
+  gap: 7px;
+  justify-items: center;
+  min-width: 0;
+}
+
+.growth-plot.faded {
+  filter: saturate(0.48);
+  opacity: 0.58;
+}
+
+.growth-plot strong {
+  background: rgba(96, 65, 37, 0.58);
+  border-radius: 999px;
+  color: #fff9ec;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  max-width: 100%;
+  min-width: 52px;
+  overflow: hidden;
+  padding: 8px 10px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.growth-plot.current strong {
+  background: #fffdf8;
+  box-shadow: 0 2px 0 rgba(96, 148, 72, 0.2);
+  color: #4f8b3c;
+}
+
+.garden-plant {
+  display: block;
+  height: 88px;
+  position: relative;
+  width: 54px;
+}
+
+.garden-plant::before {
+  background: radial-gradient(ellipse, rgba(90, 54, 24, 0.36), transparent 68%);
+  bottom: -3px;
+  content: "";
+  height: 22px;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 70px;
+}
+
+.plant-sprout,
+.plant-leaves,
+.plant-bud,
+.plant-flower {
+  --stem: #5b9b48;
+  --leaf-shade: #81c85f;
+}
+
+.plant-sprout::after,
+.plant-leaves::after,
+.plant-bud::after,
+.plant-flower::after {
+  background: linear-gradient(180deg, #76b85b, #4f8b3c);
+  border-radius: 999px;
+  bottom: 12px;
+  content: "";
+  height: 48px;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 8px;
+}
+
+.plant-sprout {
+  transform: scale(0.76);
+  transform-origin: bottom center;
+}
+
+.plant-sprout span,
+.plant-leaves span,
+.plant-bud span,
+.plant-flower span {
+  display: none;
+}
+
+.plant-sprout::before {
+  background:
+    radial-gradient(ellipse at 38% 45%, #8fcb6d 0 36%, transparent 37%),
+    radial-gradient(ellipse at 63% 45%, #8fcb6d 0 36%, transparent 37%),
+    radial-gradient(ellipse, rgba(90, 54, 24, 0.36), transparent 68%);
+  background-position:
+    12px 38px,
+    28px 36px,
+    center bottom;
+  background-repeat: no-repeat;
+  background-size:
+    26px 22px,
+    26px 22px,
+    70px 22px;
+}
+
+.plant-leaves {
+  height: 104px;
+  width: 72px;
+}
+
+.plant-leaves::before {
+  background:
+    radial-gradient(ellipse at 34% 42%, #8bd05e 0 31%, #5ea83f 32% 50%, transparent 51%),
+    radial-gradient(ellipse at 66% 42%, #8bd05e 0 31%, #5ea83f 32% 50%, transparent 51%),
+    radial-gradient(ellipse, rgba(90, 54, 24, 0.42), transparent 68%);
+  background-position:
+    2px 26px,
+    34px 24px,
+    center bottom;
+  background-repeat: no-repeat;
+  background-size:
+    42px 36px,
+    42px 36px,
+    78px 24px;
+}
+
+.plant-bud {
+  height: 112px;
+  width: 62px;
+}
+
+.plant-bud::before {
+  background:
+    radial-gradient(ellipse at 50% 20%, #fffdf8 0 23%, #d9e5cd 24% 42%, transparent 43%),
+    radial-gradient(ellipse at 28% 54%, #a9ce92 0 28%, transparent 29%),
+    radial-gradient(ellipse at 72% 54%, #a9ce92 0 28%, transparent 29%),
+    radial-gradient(ellipse, rgba(90, 54, 24, 0.36), transparent 68%);
+  background-position:
+    center 2px,
+    4px 45px,
+    34px 45px,
+    center bottom;
+  background-repeat: no-repeat;
+  background-size:
+    40px 48px,
+    28px 26px,
+    28px 26px,
+    74px 22px;
+}
+
+.plant-flower {
+  height: 124px;
+  width: 78px;
+}
+
+.plant-flower::before {
+  background:
+    radial-gradient(circle at 50% 18%, #fef8f1 0 14%, transparent 15%),
+    radial-gradient(circle at 33% 29%, #fffdf8 0 14%, transparent 15%),
+    radial-gradient(circle at 67% 29%, #fffdf8 0 14%, transparent 15%),
+    radial-gradient(circle at 50% 40%, #fffdf8 0 14%, transparent 15%),
+    radial-gradient(circle at 50% 30%, #c9d1bc 0 13%, transparent 14%),
+    radial-gradient(ellipse at 32% 61%, #a9ce92 0 26%, transparent 27%),
+    radial-gradient(ellipse at 68% 61%, #a9ce92 0 26%, transparent 27%),
+    radial-gradient(ellipse, rgba(90, 54, 24, 0.36), transparent 68%);
+  background-position:
+    center 0,
+    9px 18px,
+    45px 18px,
+    center 36px,
+    center 24px,
+    5px 58px,
+    44px 58px,
+    center bottom;
+  background-repeat: no-repeat;
+  background-size:
+    36px 36px,
+    36px 36px,
+    36px 36px,
+    36px 36px,
+    28px 28px,
+    30px 28px,
+    30px 28px,
+    82px 24px;
 }
 
 .character {
@@ -516,13 +724,14 @@ p {
 .flower-row {
   background:
     radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.18), transparent 18%),
-    linear-gradient(180deg, #9bd87b 0%, #5dad6e 100%);
-  border-radius: 55% 55% 0 0;
-  bottom: -24px;
-  height: 84px;
+    linear-gradient(180deg, #9b6a3d 0%, #674526 100%);
+  border-top: 2px solid rgba(255, 255, 255, 0.22);
+  bottom: 0;
+  height: 62px;
   left: -18px;
   position: absolute;
   right: -18px;
+  z-index: 2;
 }
 
 .flower-item {
@@ -1760,7 +1969,24 @@ p {
   }
 
   .garden-stage {
-    height: 232px;
+    height: 252px;
+  }
+
+  .growth-showcase {
+    gap: 4px;
+    left: 8px;
+    right: 8px;
+  }
+
+  .growth-plot strong {
+    font-size: 11px;
+    min-width: 46px;
+    padding: 7px 8px;
+  }
+
+  .garden-plant {
+    transform: scale(0.88);
+    transform-origin: bottom center;
   }
 
   .garden-diary {

@@ -33,12 +33,6 @@ type Question = {
   explanation: string;
 };
 
-type GardenItem = {
-  type: "sprout" | "leaf" | "flower";
-  label: string;
-  className: string;
-};
-
 type GrowthStep = {
   label: string;
   icon: "sprout" | "leaf" | "bud" | "flower";
@@ -83,6 +77,12 @@ const uiText = {
     heroDescription: "",
     season: "春の朝",
     tomorrowChange: "明日、花壇に変化",
+    gardenStages: {
+      sprout: "芽",
+      leaf: "若葉",
+      bud: "つぼみ",
+      flower: "花",
+    },
     defaultGardenStatus: "若葉と花が育っています",
     studiedGardenStatus: (message: string) => message,
     defaultGardenNote: "今日も少し育てよう",
@@ -157,6 +157,12 @@ const uiText = {
     heroDescription: "",
     season: "Spring Morning",
     tomorrowChange: "Tomorrow's garden may change",
+    gardenStages: {
+      sprout: "Sprout",
+      leaf: "Leaves",
+      bud: "Bud",
+      flower: "Flower",
+    },
     defaultGardenStatus: "Leaves and flowers are growing",
     studiedGardenStatus: (message: string) => message,
     defaultGardenNote: "Grow a little today",
@@ -220,16 +226,6 @@ const uiText = {
 };
 
 type UiText = (typeof uiText)[Locale];
-
-const gardenItems: GardenItem[] = [
-  { type: "sprout", label: "芽", className: "sprout-a" },
-  { type: "sprout", label: "芽", className: "sprout-b" },
-  { type: "leaf", label: "若葉", className: "leaf-sprig-a" },
-  { type: "leaf", label: "若葉", className: "leaf-sprig-b" },
-  { type: "flower", label: "花", className: "flower-a" },
-  { type: "flower", label: "花", className: "flower-b" },
-  { type: "flower", label: "花", className: "flower-c" },
-];
 
 const growthSteps: GrowthStep[] = [
   { label: "芽", icon: "sprout" },
@@ -946,10 +942,12 @@ function HomeScreen({
         xpPercent={xpPercent}
       />
 
-      <h2 className="home-section-title">{t.todayGarden}</h2>
-
       <section className="hero-garden">
         <div className="home-copy">
+          <p className="garden-card-title">
+            <span aria-hidden="true">🌱</span>
+            {t.todayGarden}
+          </p>
           <h1>{t.heroTitle}</h1>
           {t.heroDescription ? <p>{t.heroDescription}</p> : null}
           <span className="hero-season-pill">{t.season}</span>
@@ -959,27 +957,25 @@ function HomeScreen({
           <div className="sun" />
           <div className="cloud cloud-a" />
           <div className="cloud cloud-b" />
-          <div className="tomorrow-seed">{t.tomorrowChange}</div>
-          <div className="garden-path" />
-          <div className="character">
-            <span className="ear left" />
-            <span className="ear right" />
-            <span className="face">•ᴗ•</span>
+          <div className="garden-hills" />
+          <div className="growth-showcase" aria-label="庭の成長ステージ">
+            <div className="growth-plot faded">
+              <span className="garden-plant plant-sprout" />
+              <strong>{t.gardenStages.sprout}</strong>
+            </div>
+            <div className="growth-plot current">
+              <span className="garden-plant plant-leaves" />
+              <strong>{t.gardenStages.leaf}</strong>
+            </div>
+            <div className="growth-plot faded">
+              <span className="garden-plant plant-bud" />
+              <strong>{t.gardenStages.bud}</strong>
+            </div>
+            <div className="growth-plot faded">
+              <span className="garden-plant plant-flower" />
+              <strong>{t.gardenStages.flower}</strong>
+            </div>
           </div>
-          <div className="tree-growth">
-            <span className="trunk" />
-            <span className="leaf left" />
-            <span className="leaf right" />
-            <span className="leaf top" />
-          </div>
-          {gardenItems.map((item) => (
-            <span
-              aria-label={item.label}
-              className={`${item.type}-item ${item.className}`}
-              key={`${item.type}-${item.className}`}
-              role="img"
-            />
-          ))}
           <div className="flower-row">
             <span className="soil-dot soil-dot-a" />
             <span className="soil-dot soil-dot-b" />
