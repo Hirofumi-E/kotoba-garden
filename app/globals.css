@@ -203,9 +203,14 @@ small,
 }
 
 .home-copy {
-  padding: 20px 20px 0;
+  padding: 16px 18px 0;
   position: relative;
   z-index: 2;
+}
+
+.home-copy h1 {
+  font-size: 24px;
+  line-height: 1.12;
 }
 
 .eyebrow {
@@ -244,7 +249,7 @@ p {
 }
 
 .garden-stage {
-  height: 258px;
+  height: 246px;
   overflow: hidden;
   position: relative;
 }
@@ -573,9 +578,9 @@ p {
     radial-gradient(circle at 94% 20%, rgba(246, 214, 117, 0.32), transparent 28%),
     linear-gradient(135deg, #fffdf8, #f2ffed);
   display: flex;
-  gap: 12px;
+  gap: 10px;
   justify-content: space-between;
-  padding: 14px 16px;
+  padding: 12px 14px;
   position: relative;
 }
 
@@ -631,9 +636,10 @@ p {
 
 .garden-diary small {
   color: var(--muted);
-  flex: 0 0 112px;
+  flex: 0 0 auto;
   font-size: 12px;
   line-height: 1.35;
+  text-align: right;
 }
 
 .level-card {
@@ -744,7 +750,7 @@ p {
 
 .quick-grid {
   display: grid;
-  gap: 10px;
+  gap: 8px;
   grid-template-columns: repeat(2, 1fr);
 }
 
@@ -768,6 +774,13 @@ p {
   text-align: left;
 }
 
+.quick-grid .primary-action,
+.quick-grid .secondary-action,
+.quick-grid .review-action {
+  min-height: 50px;
+  padding: 10px 14px;
+}
+
 .primary-action {
   background: linear-gradient(180deg, #ffb09d, var(--coral));
   box-shadow: 0 6px 0 var(--coral-dark);
@@ -775,7 +788,7 @@ p {
   position: relative;
   overflow: hidden;
   grid-column: 1 / -1;
-  min-height: 62px;
+  min-height: 58px;
 }
 
 .primary-action::after {
@@ -1708,6 +1721,42 @@ p {
 }
 
 @media (max-width: 390px) {
+  .home-copy {
+    padding: 14px 16px 0;
+  }
+
+  .home-copy h1 {
+    font-size: 22px;
+  }
+
+  .garden-stage {
+    height: 232px;
+  }
+
+  .garden-diary {
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .garden-diary strong {
+    font-size: 13px;
+  }
+
+  .quick-grid {
+    gap: 7px;
+  }
+
+  .quick-grid .primary-action,
+  .quick-grid .secondary-action,
+  .quick-grid .review-action {
+    min-height: 48px;
+    padding: 10px 12px;
+  }
+
+  .quick-grid .primary-action {
+    min-height: 54px;
+  }
+
   .quiz-screen {
     gap: 7px;
     padding: 8px 10px 74px;

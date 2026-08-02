@@ -78,18 +78,18 @@ const uiText = {
     grammar: "文法",
     review: "復習",
     todayGarden: "今日の庭",
-    heroTitle: "朝つゆで、若葉がひらきました。",
-    heroDescription: "あと1問だけ遊ぶと、明日の花壇に小さな色が増えます。",
+    heroTitle: "若葉がひらきました。",
+    heroDescription: "",
     season: "春の朝",
     tomorrowChange: "明日、花壇に変化",
-    defaultGardenStatus: "若葉が2枚、花が1つ増えました",
-    studiedGardenStatus: (message: string) => `今の学習で、${message}`,
-    defaultGardenNote: "あと1問で、明日の庭が少し変わります",
-    studiedGardenNote: (earnedXp: number) => `経験値 +${earnedXp} が庭に届きました`,
-    growGarden: "庭をもう少し育てる",
-    growGardenHint: "あと少しで若葉が育ちます",
-    grammarHint: "芽を育てる",
-    reviewHint: "水やりだけして戻る",
+    defaultGardenStatus: "若葉と花が育っています",
+    studiedGardenStatus: (message: string) => message,
+    defaultGardenNote: "今日も少し育てよう",
+    studiedGardenNote: (earnedXp: number) => `+${earnedXp} XP`,
+    growGarden: "もう少し育てる",
+    growGardenHint: "",
+    grammarHint: "",
+    reviewHint: "",
     todayMissions: "今日のミッション",
     missions: "ミッション",
     streak: "3日連続",
@@ -132,9 +132,9 @@ const uiText = {
     xpGained: (xp: number) => `経験値 +${xp}`,
     oneAnswerXp: "経験値 +10",
     growthByType: {
-      vocabulary: "若葉が少し育ちました",
-      grammar: "文の土台が少し育ちました",
-      review: "復習の水で芽が元気になりました",
+      vocabulary: "若葉が育ちました！",
+      grammar: "文法の芽が育ちました！",
+      review: "芽が元気になりました！",
     },
     feedbackGrowthByType: {
       vocabulary: "ことばの芽に光が入りました",
@@ -151,18 +151,18 @@ const uiText = {
     grammar: "Grammar",
     review: "Review",
     todayGarden: "Today's Garden",
-    heroTitle: "Morning dew opened the young leaves.",
-    heroDescription: "Try one more question to add a little color tomorrow.",
+    heroTitle: "New leaves opened.",
+    heroDescription: "",
     season: "Spring Morning",
     tomorrowChange: "Tomorrow's garden may change",
-    defaultGardenStatus: "Two young leaves and one flower grew",
-    studiedGardenStatus: (message: string) => `From this lesson, ${message}`,
-    defaultGardenNote: "One more question can gently change tomorrow's garden",
-    studiedGardenNote: (earnedXp: number) => `XP +${earnedXp} reached your garden`,
-    growGarden: "Grow Your Garden",
-    growGardenHint: "One small step is enough",
-    grammarHint: "Grow grammar sprouts",
-    reviewHint: "Water the review sprouts",
+    defaultGardenStatus: "Leaves and flowers are growing",
+    studiedGardenStatus: (message: string) => message,
+    defaultGardenNote: "Grow a little today",
+    studiedGardenNote: (earnedXp: number) => `+${earnedXp} XP`,
+    growGarden: "Keep growing",
+    growGardenHint: "",
+    grammarHint: "",
+    reviewHint: "",
     todayMissions: "Today's Missions",
     missions: "Missions",
     streak: "3-day streak",
@@ -205,9 +205,9 @@ const uiText = {
     xpGained: (xp: number) => `XP +${xp}`,
     oneAnswerXp: "XP +10",
     growthByType: {
-      vocabulary: "your garden grew a little",
-      grammar: "your grammar roots grew a little",
-      review: "your review sprouts feel refreshed",
+      vocabulary: "New leaves grew!",
+      grammar: "Grammar sprouted!",
+      review: "Sprouts feel fresh!",
     },
     feedbackGrowthByType: {
       vocabulary: "Light reached your word sprout",
@@ -948,7 +948,7 @@ function HomeScreen({
         <div className="home-copy">
           <p className="eyebrow">{t.todayGarden}</p>
           <h1>{t.heroTitle}</h1>
-          <p>{t.heroDescription}</p>
+          {t.heroDescription ? <p>{t.heroDescription}</p> : null}
         </div>
 
         <div className="garden-stage" aria-label="レベル2の庭">
@@ -1000,15 +1000,15 @@ function HomeScreen({
       <section className="quick-grid">
         <button className="primary-action" type="button" onClick={onStart}>
           <span>{t.growGarden}</span>
-          <small>{t.growGardenHint}</small>
+          {t.growGardenHint ? <small>{t.growGardenHint}</small> : null}
         </button>
         <button className="secondary-action" type="button" onClick={onGrammar}>
           <span>{t.grammar}</span>
-          <small>{t.grammarHint}</small>
+          {t.grammarHint ? <small>{t.grammarHint}</small> : null}
         </button>
         <button className="review-action" type="button" onClick={onReview}>
           <span>{t.review}</span>
-          <small>{t.reviewHint}</small>
+          {t.reviewHint ? <small>{t.reviewHint}</small> : null}
         </button>
       </section>
     </div>
