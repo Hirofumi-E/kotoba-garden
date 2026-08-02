@@ -203,7 +203,10 @@ small,
 }
 
 .home-copy {
-  padding: 16px 18px 0;
+  display: grid;
+  gap: 4px;
+  justify-items: start;
+  padding: 16px 18px 10px;
   position: relative;
   z-index: 2;
 }
@@ -217,8 +220,20 @@ small,
   color: #5c7d41;
   display: block;
   line-height: 1.1;
-  margin-bottom: 4px;
+  margin: 0;
   text-transform: none;
+}
+
+.hero-season-pill {
+  background: rgba(255, 253, 248, 0.9);
+  border: 1px solid rgba(228, 217, 189, 0.9);
+  border-radius: 999px;
+  color: #5c7d41;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 900;
+  margin-top: 4px;
+  padding: 7px 11px;
 }
 
 .eyebrow {
@@ -1730,7 +1745,7 @@ p {
 
 @media (max-width: 390px) {
   .home-copy {
-    padding: 14px 16px 0;
+    padding: 14px 16px 9px;
   }
 
   .home-copy h1 {

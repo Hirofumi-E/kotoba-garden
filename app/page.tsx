@@ -951,13 +951,13 @@ function HomeScreen({
           <p className="eyebrow">{t.todayGarden}</p>
           <h1>{t.heroTitle}</h1>
           {t.heroDescription ? <p>{t.heroDescription}</p> : null}
+          <span className="hero-season-pill">{t.season}</span>
         </div>
 
         <div className="garden-stage" aria-label="レベル2の庭">
           <div className="sun" />
           <div className="cloud cloud-a" />
           <div className="cloud cloud-b" />
-          <div className="growth-ribbon">{t.season}</div>
           <div className="tomorrow-seed">{t.tomorrowChange}</div>
           <div className="garden-path" />
           <div className="character">
