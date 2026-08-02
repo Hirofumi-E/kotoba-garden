@@ -946,9 +946,10 @@ function HomeScreen({
         xpPercent={xpPercent}
       />
 
+      <h2 className="home-section-title">{t.todayGarden}</h2>
+
       <section className="hero-garden">
         <div className="home-copy">
-          <p className="eyebrow">{t.todayGarden}</p>
           <h1>{t.heroTitle}</h1>
           {t.heroDescription ? <p>{t.heroDescription}</p> : null}
           <span className="hero-season-pill">{t.season}</span>

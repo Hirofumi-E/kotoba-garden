@@ -176,6 +176,13 @@ small,
   padding: 16px 14px 86px;
 }
 
+.home-section-title {
+  color: #2f5938;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
 .hero-garden {
   background:
     linear-gradient(180deg, rgba(223, 245, 255, 0.96) 0%, rgba(246, 255, 231, 0.98) 54%, rgba(211, 235, 168, 0.98) 100%);
